@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {images, icons, colors} from '../constants';
 import {isValidEmail, isValidPassword} from '../Validations/Validation';
@@ -25,7 +26,7 @@ const RegisterScreen = () => {
     isValidEmail(email) == true &&
     isValidPassword(password) == true;
   return (
-    <View
+    <ScrollView
       style={{
         flex: 100,
         backgroundColor: '#CEF3F9',
@@ -271,7 +272,7 @@ const RegisterScreen = () => {
           />
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 export default RegisterScreen;
