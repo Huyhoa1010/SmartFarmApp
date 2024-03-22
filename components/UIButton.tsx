@@ -1,10 +1,22 @@
-import React from 'react'
-import {Text, TouchableOpacity} from 'react-native'
+/* eslint-disable react-native/no-inline-styles */
+import React from 'react';
+import {Text, TouchableOpacity, ColorValue} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {colors} from '../constants';
 
-function UIButton(props) {
-  const {onPress, title, isSelected} = props;
+interface UIButtonProps {
+  onPress: () => void;
+  title: string;
+  isSelected: boolean;
+}
+
+function UIButton(props: UIButtonProps) {
+  const {onPress, isSelected} = props;
+
+  const backgroundColor: ColorValue | undefined = isSelected
+    ? '#56e02f'
+    : 'white';
+
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -17,9 +29,9 @@ function UIButton(props) {
         marginVertical: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: isSelected == true ? 'white' : null,
+        backgroundColor: backgroundColor,
       }}>
-      {isSelected == true && (
+      {isSelected && (
         <Icon
           name={'check-circle'}
           style={{
@@ -33,11 +45,12 @@ function UIButton(props) {
       )}
       <Text
         style={{
-          color: isSelected == true ? 'black' : colors.primary,
+          color: isSelected ? colors.primary : 'black',
         }}>
         {props.title}
       </Text>
     </TouchableOpacity>
   );
 }
+
 export default UIButton;

@@ -1,6 +1,6 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -8,15 +8,24 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  Keyboard,
+  KeyboardAvoidingView,
 } from 'react-native';
-import {images, icons, colors} from '../constants';
+import {images, colors} from '../constants';
 import {isValidEmail, isValidPassword} from '../Validations/Validation';
 
-const RegisterScreen = () => {
-  //state for validate
+const RegisterScreen = ({navigation}: any) => {
+  const [keyboardIsShown, setKeyboardIsShown] = useState(false);
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardIsShown(true);
+    });
+    Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardIsShown(false);
+    });
+  });
   const [errorEmail, setErrorEmail] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
-  //state to store email/password
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const isValidationLogin = () =>
@@ -25,7 +34,7 @@ const RegisterScreen = () => {
     isValidEmail(email) == true &&
     isValidPassword(password) == true;
   return (
-    <View
+    <KeyboardAvoidingView
       style={{
         flex: 100,
         backgroundColor: '#CEF3F9',
@@ -182,42 +191,39 @@ const RegisterScreen = () => {
               alignSelf: 'center',
             }}
           />
-          <Text
-            style={{
-              fontSize: 10,
-              color: 'red',
-            }}>
-            {errorPassword}
-          </Text>
         </View>
-        <View
-          style={{
-            justifyContent: 'flex-start',
-          }}>
-          <TouchableOpacity
-            disabled={isValidationLogin() == false}
-            onPress={() => {
-              Alert.alert(`Email= ${email}, password= ${password}`);
-            }}
+        {keyboardIsShown == false && (
+          <View
             style={{
-              backgroundColor:
-                isValidationLogin() == true ? 'red' : colors.inactive,
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '50%',
-              alignSelf: 'center',
-              borderRadius: 30,
+              justifyContent: 'flex-start',
+              marginTop: 70,
             }}>
-            <Text
+            <TouchableOpacity
+              disabled={isValidationLogin() == false}
+              onPress={() => {
+                navigation.navigate('Login');
+                Alert.alert('Account registration successful');
+              }}
               style={{
-                padding: 10,
-                fontSize: 13,
-                fontWeight: 'bold',
+                backgroundColor:
+                  isValidationLogin() == true ? 'red' : colors.inactive,
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '50%',
+                alignSelf: 'center',
+                borderRadius: 30,
               }}>
-              Register
-            </Text>
-          </TouchableOpacity>
-        </View>
+              <Text
+                style={{
+                  padding: 10,
+                  fontSize: 13,
+                  fontWeight: 'bold',
+                }}>
+                Register
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
       <View
         style={{
@@ -271,7 +277,7 @@ const RegisterScreen = () => {
           />
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 export default RegisterScreen;

@@ -8,11 +8,22 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  KeyboardAvoidingView,
+  Keyboard,
 } from 'react-native';
-import {images, icons, colors} from '../constants';
+import {images, colors} from '../constants';
 import {isValidEmail, isValidPassword} from '../Validations/Validation';
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}: any) => {
+  const [keyboardIsShown, setKeyboardIsShown] = useState(false);
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardIsShown(true);
+    });
+    Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardIsShown(false);
+    });
+  });
   //state for validate
   const [errorEmail, setErrorEmail] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
@@ -25,7 +36,7 @@ const LoginScreen = () => {
     isValidEmail(email) == true &&
     isValidPassword(password) == true;
   return (
-    <View
+    <KeyboardAvoidingView
       style={{
         flex: 100,
         backgroundColor: '#CEF3F9',
@@ -149,106 +160,126 @@ const LoginScreen = () => {
           </Text>
         </View>
       </View>
-      <View
-        style={{
-          flex: 20,
-          justifyContent: 'flex-start',
-        }}>
-        <TouchableOpacity
-          disabled={isValidationLogin() == false}
-          onPress={() => {
-            Alert.alert(`Email= ${email}, password= ${password}`);
-          }}
-          style={{
-            backgroundColor:
-              isValidationLogin() == true ? 'red' : colors.inactive,
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '50%',
-            alignSelf: 'center',
-            borderRadius: 30,
-          }}>
-          <Text
-            style={{
-              padding: 10,
-              fontSize: 13,
-              fontWeight: 'bold',
-            }}>
-            Login
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            Alert.alert('X');
-          }}
-          style={{
-            padding: 5,
-          }}>
-          <Text
-            style={{
-              padding: 10,
-              fontSize: 10,
-              color: 'black',
-              fontWeight: 'bold',
-              alignSelf: 'center',
-            }}>
-            Not now? Register now
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View
-        style={{
-          flex: 15,
-        }}>
+      {keyboardIsShown == false && (
         <View
           style={{
-            height: 40,
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginHorizontal: 10,
+            flex: 20,
+            justifyContent: 'flex-start',
+          }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Register')}
+            style={{
+              padding: 5,
+            }}>
+            <Text
+              style={{
+                padding: 10,
+                fontSize: 10,
+                color: 'black',
+                fontWeight: 'bold',
+                alignSelf: 'flex-end',
+                fontStyle: 'italic',
+              }}>
+              Forgot password?
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            disabled={isValidationLogin() == false}
+            onPress={() => {
+              navigation.navigate('Gateway');
+              Alert.alert('Logged in successfully');
+            }}
+            style={{
+              backgroundColor:
+                isValidationLogin() == true ? 'red' : colors.inactive,
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '50%',
+              alignSelf: 'center',
+              borderRadius: 30,
+            }}>
+            <Text
+              style={{
+                padding: 10,
+                fontSize: 13,
+                fontWeight: 'bold',
+              }}>
+              Login
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Register')}
+            style={{
+              padding: 5,
+            }}>
+            <Text
+              style={{
+                padding: 10,
+                fontSize: 10,
+                color: 'black',
+                fontWeight: 'bold',
+                alignSelf: 'center',
+              }}>
+              Not now? Register now
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      {keyboardIsShown == false && (
+        <View
+          style={{
+            flex: 15,
           }}>
           <View
             style={{
-              height: 1,
-              flex: 1,
-              backgroundColor: 'black',
-            }}
-          />
-          <Text
-            style={{
-              padding: 8,
-              fontSize: 10,
-              fontWeight: 'bold',
-              color: 'black',
-              alignSelf: 'center',
-              marginHorizontal: 5,
+              height: 40,
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginHorizontal: 10,
             }}>
-            Use other methods?
-          </Text>
+            <View
+              style={{
+                height: 1,
+                flex: 1,
+                backgroundColor: 'black',
+              }}
+            />
+            <Text
+              style={{
+                padding: 8,
+                fontSize: 10,
+                fontWeight: 'bold',
+                color: 'black',
+                alignSelf: 'center',
+                marginHorizontal: 5,
+              }}>
+              Use other methods?
+            </Text>
+            <View
+              style={{
+                height: 1,
+                flex: 1,
+                backgroundColor: 'black',
+              }}
+            />
+          </View>
           <View
             style={{
-              height: 1,
-              flex: 1,
-              backgroundColor: 'black',
-            }}
-          />
+              flexDirection: 'row',
+              alignSelf: 'center',
+            }}>
+            <Image
+              source={images.facebook}
+              style={{marginStart: 10, marginEnd: 5, width: 35, height: 35}}
+            />
+            <Image
+              source={images.google}
+              style={{marginStart: 10, marginEnd: 5, width: 35, height: 35}}
+            />
+          </View>
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignSelf: 'center',
-          }}>
-          <Image
-            source={images.facebook}
-            style={{marginStart: 10, marginEnd: 5, width: 35, height: 35}}
-          />
-          <Image
-            source={images.google}
-            style={{marginStart: 10, marginEnd: 5, width: 35, height: 35}}
-          />
-        </View>
-      </View>
-    </View>
+      )}
+    </KeyboardAvoidingView>
   );
 };
 export default LoginScreen;
