@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import {images, colors} from '../constants';
 import {isValidEmail, isValidPassword} from '../Validations/Validation';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const RegisterScreen = ({navigation}: any) => {
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
@@ -33,6 +34,7 @@ const RegisterScreen = ({navigation}: any) => {
     password.length > 0 &&
     isValidEmail(email) == true &&
     isValidPassword(password) == true;
+  const [passwordVisible, setPasswordVisible] = useState(false);
   return (
     <KeyboardAvoidingView
       style={{
@@ -127,22 +129,51 @@ const RegisterScreen = ({navigation}: any) => {
             }}>
             Password:
           </Text>
-          <TextInput
-            onChangeText={text => {
-              setErrorPassword(
-                isValidPassword(text) == true
-                  ? ''
-                  : 'Password contain at least 8-16 characters, 1 uppercase letter, 1 lowercase letter, 1 special character, and 1 number.',
-              );
-              setPassword(text);
-            }}
+          <View
             style={{
-              color: 'black',
-            }}
-            secureTextEntry={true}
-            placeholder="Enter your password here"
-            placeholderTextColor={colors.placeholder}
-          />
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <TextInput
+              onChangeText={text => {
+                setErrorPassword(
+                  isValidPassword(text) == true
+                    ? ''
+                    : 'Password contain at least 8-16 characters, 1 uppercase letter, 1 lowercase letter, 1 special character, and 1 number.',
+                );
+                setPassword(text);
+              }}
+              style={{
+                color: 'black',
+              }}
+              secureTextEntry={true}
+              placeholder="Enter your password here"
+              placeholderTextColor={colors.placeholder}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                setPasswordVisible(!passwordVisible);
+              }}>
+              {passwordVisible ? (
+                <Icon
+                  name="eye-slash"
+                  size={20}
+                  style={{
+                    color: 'black',
+                  }}
+                />
+              ) : (
+                <Icon
+                  name="eye"
+                  size={20}
+                  style={{
+                    color: 'black',
+                  }}
+                />
+              )}
+            </TouchableOpacity>
+          </View>
           <View
             style={{
               height: 1,
@@ -173,14 +204,43 @@ const RegisterScreen = ({navigation}: any) => {
             }}>
             Retype Password:
           </Text>
-          <TextInput
+          <View
             style={{
-              color: 'black',
-            }}
-            secureTextEntry={true}
-            placeholder="Re-Enter your password here"
-            placeholderTextColor={colors.placeholder}
-          />
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <TextInput
+              style={{
+                color: 'black',
+              }}
+              secureTextEntry={true}
+              placeholder="Re-Enter your password here"
+              placeholderTextColor={colors.placeholder}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                setPasswordVisible(!passwordVisible);
+              }}>
+              {passwordVisible ? (
+                <Icon
+                  name="eye-slash"
+                  style={{
+                    color: 'black',
+                    fontSize: 20,
+                  }}
+                />
+              ) : (
+                <Icon
+                  name="eye"
+                  style={{
+                    color: 'black',
+                    fontSize: 20,
+                  }}
+                />
+              )}
+            </TouchableOpacity>
+          </View>
           <View
             style={{
               height: 1,
