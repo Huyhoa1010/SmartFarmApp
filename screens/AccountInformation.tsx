@@ -4,7 +4,7 @@ import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import colors from '../constants/colors';
 
-const AccountInformation = () => {
+const AccountInformation = ({navigation}: any) => {
   return (
     <View
       style={{
@@ -18,7 +18,7 @@ const AccountInformation = () => {
           flexDirection: 'row',
           alignItems: 'center',
         }}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.push('Main')}>
           <Icon
             name={'angle-left'}
             style={{

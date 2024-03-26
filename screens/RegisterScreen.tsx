@@ -35,6 +35,7 @@ const RegisterScreen = ({navigation}: any) => {
     isValidEmail(email) == true &&
     isValidPassword(password) == true;
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [retypePasswordVisible, setRetypePasswordVisible] = useState(false);
   return (
     <KeyboardAvoidingView
       style={{
@@ -147,7 +148,7 @@ const RegisterScreen = ({navigation}: any) => {
               style={{
                 color: 'black',
               }}
-              secureTextEntry={true}
+              secureTextEntry={passwordVisible ? false : true}
               placeholder="Enter your password here"
               placeholderTextColor={colors.placeholder}
             />
@@ -214,15 +215,15 @@ const RegisterScreen = ({navigation}: any) => {
               style={{
                 color: 'black',
               }}
-              secureTextEntry={true}
+              secureTextEntry={retypePasswordVisible ? false : true}
               placeholder="Re-Enter your password here"
               placeholderTextColor={colors.placeholder}
             />
             <TouchableOpacity
               onPress={() => {
-                setPasswordVisible(!passwordVisible);
+                setRetypePasswordVisible(!retypePasswordVisible);
               }}>
-              {passwordVisible ? (
+              {retypePasswordVisible ? (
                 <Icon
                   name="eye-slash"
                   style={{
@@ -256,7 +257,7 @@ const RegisterScreen = ({navigation}: any) => {
           <View
             style={{
               justifyContent: 'flex-start',
-              marginTop: 70,
+              marginTop: 20,
             }}>
             <TouchableOpacity
               disabled={isValidationLogin() == false}
