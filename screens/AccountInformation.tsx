@@ -1,10 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import colors from '../constants/colors';
 
-const AccountInformation = ({navigation}: any) => {
+const AccountInformation = ({ navigation }: any) => {
   return (
     <View
       style={{
@@ -134,44 +134,45 @@ const AccountInformation = ({navigation}: any) => {
               }}
             />
           </View>
-          <TouchableOpacity>
+
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View
+            style={{
+              flexDirection: 'row',
+              paddingVertical: 10,
+              alignItems: 'center',
+            }}>
+            <Icon
+              name="lock"
+              size={20}
+              style={{
+                color: 'black',
+                paddingStart: 10,
+              }}
+            />
+            <Text
+              style={{
+                color: 'black',
+                fontSize: 15,
+                paddingStart: 20,
+              }}>
+              Change Password
+            </Text>
             <View
               style={{
-                flexDirection: 'row',
-                paddingVertical: 10,
-                alignItems: 'center',
-              }}>
-              <Icon
-                name="lock"
-                size={20}
-                style={{
-                  color: 'black',
-                  paddingStart: 10,
-                }}
-              />
-              <Text
-                style={{
-                  color: 'black',
-                  fontSize: 15,
-                  paddingStart: 20,
-                }}>
-                Change Password
-              </Text>
-              <View
-                style={{
-                  flex: 1,
-                }}
-              />
-              <Icon
-                name="angle-right"
-                size={20}
-                style={{
-                  color: 'black',
-                  paddingEnd: 10,
-                }}
-              />
-            </View>
-          </TouchableOpacity>
+                flex: 1,
+              }}
+            />
+            <Icon
+              name="angle-right"
+              size={20}
+              style={{
+                color: 'black',
+                paddingEnd: 10,
+              }}
+            />
+          </View>
         </TouchableOpacity>
         <View
           style={{
