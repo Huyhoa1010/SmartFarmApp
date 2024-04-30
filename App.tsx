@@ -8,14 +8,15 @@ import {
   LoginScreen,
   MainScreen,
   RegisterScreen,
-} from './screens';
+} from './src/screens';
+import UITab from './src/navigation/UITab';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Home"
           component={HomeScreen}
@@ -29,6 +30,7 @@ const App = () => {
           component={ChooseGateway}
           options={{headerShown: false}}
         />
+        <Stack.Screen name="UITab" component={UITab} />
         <Stack.Screen
           name="Account"
           component={AccountInformation}
@@ -41,6 +43,7 @@ const App = () => {
     //<MainScreen />
     //<AccountInformation />
     //<RegisterScreen />
+    //<UITab />
   );
 };
 

@@ -27,10 +27,6 @@ const ChooseGateway = ({navigation}: any) => {
       name: 'Gateway 5',
       isSelected: false,
     },
-    {
-      name: 'Gateway 6',
-      isSelected: false,
-    },
   ]);
   return (
     <View
@@ -48,7 +44,7 @@ const ChooseGateway = ({navigation}: any) => {
           style={{
             fontSize: 20,
             fontWeight: 'bold',
-            color: '#56e02f',
+            color: colors.font,
           }}>
           Choose Gateway to use
         </Text>
@@ -80,7 +76,7 @@ const ChooseGateway = ({navigation}: any) => {
           alignItems: 'center',
         }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Main')}
+          onPress={() => navigation.navigate('UITab')}
           style={{
             backgroundColor: '#56e02f',
             justifyContent: 'center',

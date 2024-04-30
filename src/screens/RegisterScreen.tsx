@@ -1,4 +1,3 @@
-/* eslint-disable eqeqeq */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
@@ -10,10 +9,16 @@ import {
   Alert,
   Keyboard,
   KeyboardAvoidingView,
+  ActivityIndicator,
 } from 'react-native';
 import {images, colors} from '../constants';
-import {isValidEmail, isValidPassword} from '../Validations/Validation';
+import {
+  isValidEmail,
+  isValidPassword,
+} from '../services/Validations/Validation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {registerUser} from '../APIServices/API';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegisterScreen = ({navigation}: any) => {
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
@@ -25,17 +30,43 @@ const RegisterScreen = ({navigation}: any) => {
       setKeyboardIsShown(false);
     });
   });
+
   const [errorEmail, setErrorEmail] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const isValidationLogin = () =>
     email.length > 0 &&
     password.length > 0 &&
-    isValidEmail(email) == true &&
-    isValidPassword(password) == true;
+    isValidEmail(email) === true &&
+    isValidPassword(password) === true;
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [retypePasswordVisible, setRetypePasswordVisible] = useState(false);
+  const [retypePassword, setRetypePassword] = useState('');
+
+  const handleRegister = async () => {
+    setLoading(true);
+    try {
+      const response = await registerUser(email, password);
+      await AsyncStorage.setItem('token', response.token);
+      setLoading(false);
+      Alert.alert(
+        'Registration Successful',
+        'You have been registered successfully.',
+      );
+      navigation.navigate('Login');
+    } catch (error) {
+      setLoading(false);
+      if (error instanceof Error) {
+        Alert.alert('Registration Error', error.message);
+      } else {
+        Alert.alert('Registration Error', 'An unexpected error occurred');
+      }
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={{
@@ -90,7 +121,9 @@ const RegisterScreen = ({navigation}: any) => {
           <TextInput
             onChangeText={text => {
               setErrorEmail(
-                isValidEmail(text) == true ? '' : 'Email not in correct format',
+                isValidEmail(text) === true
+                  ? ''
+                  : 'Email not in correct format',
               );
               setEmail(text);
             }}
@@ -139,7 +172,7 @@ const RegisterScreen = ({navigation}: any) => {
             <TextInput
               onChangeText={text => {
                 setErrorPassword(
-                  isValidPassword(text) == true
+                  isValidPassword(text) === true
                     ? ''
                     : 'Password contain at least 8-16 characters, 1 uppercase letter, 1 lowercase letter, 1 special character, and 1 number.',
                 );
@@ -212,6 +245,9 @@ const RegisterScreen = ({navigation}: any) => {
               justifyContent: 'space-between',
             }}>
             <TextInput
+              onChangeText={text => {
+                setRetypePassword(text);
+              }}
               style={{
                 color: 'black',
               }}
@@ -253,35 +289,36 @@ const RegisterScreen = ({navigation}: any) => {
             }}
           />
         </View>
-        {keyboardIsShown == false && (
+        {keyboardIsShown === false && (
           <View
             style={{
               justifyContent: 'flex-start',
               marginTop: 20,
             }}>
             <TouchableOpacity
-              disabled={isValidationLogin() == false}
-              onPress={() => {
-                navigation.navigate('Login');
-                Alert.alert('Account registration successful');
-              }}
+              disabled={isValidationLogin() === false || loading}
+              onPress={handleRegister}
               style={{
                 backgroundColor:
-                  isValidationLogin() == true ? 'red' : colors.inactive,
+                  isValidationLogin() === true ? 'red' : colors.inactive,
                 justifyContent: 'center',
                 alignItems: 'center',
                 width: '50%',
                 alignSelf: 'center',
                 borderRadius: 30,
               }}>
-              <Text
-                style={{
-                  padding: 10,
-                  fontSize: 13,
-                  fontWeight: 'bold',
-                }}>
-                Register
-              </Text>
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text
+                  style={{
+                    padding: 10,
+                    fontSize: 13,
+                    fontWeight: 'bold',
+                  }}>
+                  Register
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
         )}

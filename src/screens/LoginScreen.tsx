@@ -1,4 +1,3 @@
-/* eslint-disable eqeqeq */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {
@@ -10,10 +9,16 @@ import {
   Alert,
   KeyboardAvoidingView,
   Keyboard,
+  ActivityIndicator,
 } from 'react-native';
 import {images, colors} from '../constants';
-import {isValidEmail, isValidPassword} from '../Validations/Validation';
+import {
+  isValidEmail,
+  isValidPassword,
+} from '../services/Validations/Validation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {loginUser} from '../APIServices/API';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({navigation}: any) => {
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
@@ -25,18 +30,43 @@ const LoginScreen = ({navigation}: any) => {
       setKeyboardIsShown(false);
     });
   });
+
   //state for validate
   const [errorEmail, setErrorEmail] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
   //state to store email/password
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const isValidationLogin = () =>
     email.length > 0 &&
     password.length > 0 &&
-    isValidEmail(email) == true &&
-    isValidPassword(password) == true;
+    isValidEmail(email) === true &&
+    isValidPassword(password) === true;
   const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const handleLogin = async () => {
+    if (isValidationLogin()) {
+      setLoading(true);
+      try {
+        const data = await loginUser(email, password);
+        await AsyncStorage.setItem('token', data.token);
+        setLoading(false);
+        navigation.navigate('Gateway');
+      } catch (error) {
+        setLoading(false);
+        if (error instanceof Error) {
+          Alert.alert('Login Error', error.message);
+        } else {
+          console.error('An unexpected error occurred:', error);
+          Alert.alert('Login Error', 'An unexpected error occurred');
+        }
+      }
+    } else {
+      Alert.alert('Validation Error', 'Username or password is invalid.');
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={{
@@ -87,7 +117,9 @@ const LoginScreen = ({navigation}: any) => {
           <TextInput
             onChangeText={text => {
               setErrorEmail(
-                isValidEmail(text) == true ? '' : 'Email not in correct format',
+                isValidEmail(text) === true
+                  ? ''
+                  : 'Email not in correct format',
               );
               setEmail(text);
             }}
@@ -136,7 +168,7 @@ const LoginScreen = ({navigation}: any) => {
             <TextInput
               onChangeText={text => {
                 setErrorPassword(
-                  isValidPassword(text) == true
+                  isValidPassword(text) === true
                     ? ''
                     : 'Password contain at least 8-16 characters, 1 uppercase letter, 1 lowercase letter, 1 special character, and 1 number.',
                 );
@@ -191,7 +223,7 @@ const LoginScreen = ({navigation}: any) => {
           </Text>
         </View>
       </View>
-      {keyboardIsShown == false && (
+      {keyboardIsShown === false && (
         <View
           style={{
             flex: 20,
@@ -215,28 +247,31 @@ const LoginScreen = ({navigation}: any) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            disabled={isValidationLogin() == false}
+            disabled={isValidationLogin() === false || loading}
             onPress={() => {
-              navigation.navigate('Gateway');
-              Alert.alert('Logged in successfully');
+              handleLogin();
             }}
             style={{
               backgroundColor:
-                isValidationLogin() == true ? 'red' : colors.inactive,
+                isValidationLogin() === true ? 'red' : colors.inactive,
               justifyContent: 'center',
               alignItems: 'center',
               width: '50%',
               alignSelf: 'center',
               borderRadius: 30,
             }}>
-            <Text
-              style={{
-                padding: 10,
-                fontSize: 13,
-                fontWeight: 'bold',
-              }}>
-              Login
-            </Text>
+            {loading ? (
+              <ActivityIndicator size="small" color="#0000ff" />
+            ) : (
+              <Text
+                style={{
+                  padding: 10,
+                  fontSize: 13,
+                  fontWeight: 'bold',
+                }}>
+                Login
+              </Text>
+            )}
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate('Register')}
@@ -256,7 +291,7 @@ const LoginScreen = ({navigation}: any) => {
           </TouchableOpacity>
         </View>
       )}
-      {keyboardIsShown == false && (
+      {keyboardIsShown === false && (
         <View
           style={{
             flex: 15,

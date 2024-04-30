@@ -3,46 +3,16 @@ import React from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import colors from '../constants/colors';
+import {UIHeader} from '../components';
 
-const AccountInformation = ({navigation}: any) => {
+const AccountInformation = () => {
   return (
     <View
       style={{
         flex: 100,
         backgroundColor: colors.primary,
       }}>
-      <View
-        style={{
-          height: 70,
-          backgroundColor: colors.font,
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
-        <TouchableOpacity onPress={() => navigation.push('Main')}>
-          <Icon
-            name={'angle-left'}
-            style={{
-              color: colors.primary,
-              fontSize: 30,
-              marginLeft: 20,
-            }}
-          />
-        </TouchableOpacity>
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-          }}>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: 'bold',
-              color: colors.primary,
-            }}>
-            Settings
-          </Text>
-        </View>
-      </View>
+      <UIHeader title="Settings" navigation={undefined} />
       <ScrollView>
         <View
           style={{
@@ -134,44 +104,44 @@ const AccountInformation = ({navigation}: any) => {
               }}
             />
           </View>
-          <TouchableOpacity>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View
+            style={{
+              flexDirection: 'row',
+              paddingVertical: 10,
+              alignItems: 'center',
+            }}>
+            <Icon
+              name="lock"
+              size={20}
+              style={{
+                color: 'black',
+                paddingStart: 10,
+              }}
+            />
+            <Text
+              style={{
+                color: 'black',
+                fontSize: 15,
+                paddingStart: 20,
+              }}>
+              Change Password
+            </Text>
             <View
               style={{
-                flexDirection: 'row',
-                paddingVertical: 10,
-                alignItems: 'center',
-              }}>
-              <Icon
-                name="lock"
-                size={20}
-                style={{
-                  color: 'black',
-                  paddingStart: 10,
-                }}
-              />
-              <Text
-                style={{
-                  color: 'black',
-                  fontSize: 15,
-                  paddingStart: 20,
-                }}>
-                Change Password
-              </Text>
-              <View
-                style={{
-                  flex: 1,
-                }}
-              />
-              <Icon
-                name="angle-right"
-                size={20}
-                style={{
-                  color: 'black',
-                  paddingEnd: 10,
-                }}
-              />
-            </View>
-          </TouchableOpacity>
+                flex: 1,
+              }}
+            />
+            <Icon
+              name="angle-right"
+              size={20}
+              style={{
+                color: 'black',
+                paddingEnd: 10,
+              }}
+            />
+          </View>
         </TouchableOpacity>
         <View
           style={{
