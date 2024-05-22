@@ -48,9 +48,32 @@ const MainScreen = ({navigation}: any) => {
       </View>
       <View
         style={{
-          flex: 90,
+          flex: 10,
+          height: 50,
+          backgroundColor: 'rgba(0,0,0,0.2)',
+          justifyContent: 'center',
         }}>
-        <Text>Hello</Text>
+        <Text
+          style={{
+            color: 'red',
+            fontSize: 15,
+            paddingStart: 10,
+          }}>
+          Device Information
+        </Text>
+      </View>
+      <View
+        style={{
+          flex: 80,
+        }}>
+        <Text
+          style={{
+            // color: 'black',
+            fontSize: 15,
+            paddingStart: 10,
+          }}>
+          There are no devices to display
+        </Text>
       </View>
     </View>
   );

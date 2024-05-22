@@ -17,7 +17,7 @@ import {
   isValidPassword,
 } from '../services/Validations/Validation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {registerUser} from '../APIServices/API';
+import {register} from '../APIServices/API';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegisterScreen = ({navigation}: any) => {
@@ -46,26 +46,26 @@ const RegisterScreen = ({navigation}: any) => {
   const [retypePasswordVisible, setRetypePasswordVisible] = useState(false);
   const [retypePassword, setRetypePassword] = useState('');
 
-  const handleRegister = async () => {
-    setLoading(true);
-    try {
-      const response = await registerUser(email, password);
-      await AsyncStorage.setItem('token', response.token);
-      setLoading(false);
-      Alert.alert(
-        'Registration Successful',
-        'You have been registered successfully.',
-      );
-      navigation.navigate('Login');
-    } catch (error) {
-      setLoading(false);
-      if (error instanceof Error) {
-        Alert.alert('Registration Error', error.message);
-      } else {
-        Alert.alert('Registration Error', 'An unexpected error occurred');
-      }
-    }
-  };
+  // const handleRegister = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await register(email, password);
+  //     await AsyncStorage.setItem('token', response.token);
+  //     setLoading(false);
+  //     Alert.alert(
+  //       'Registration Successful',
+  //       'You have been registered successfully.',
+  //     );
+  //     navigation.navigate('Login');
+  //   } catch (error) {
+  //     setLoading(false);
+  //     if (error instanceof Error) {
+  //       Alert.alert('Registration Error', error.message);
+  //     } else {
+  //       Alert.alert('Registration Error', 'An unexpected error occurred');
+  //     }
+  //   }
+  // };
 
   return (
     <KeyboardAvoidingView
@@ -297,7 +297,7 @@ const RegisterScreen = ({navigation}: any) => {
             }}>
             <TouchableOpacity
               disabled={isValidationLogin() === false || loading}
-              onPress={handleRegister}
+              onPress={navigation.navigate('Login')} //handleRegister
               style={{
                 backgroundColor:
                   isValidationLogin() === true ? 'red' : colors.inactive,

@@ -30,7 +30,11 @@ const App = () => {
           component={ChooseGateway}
           options={{headerShown: false}}
         />
-        <Stack.Screen name="UITab" component={UITab} />
+        <Stack.Screen
+          name="UITab"
+          component={UITab}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           name="Account"
           component={AccountInformation}

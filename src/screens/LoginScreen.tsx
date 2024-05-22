@@ -17,7 +17,7 @@ import {
   isValidPassword,
 } from '../services/Validations/Validation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {loginUser} from '../APIServices/API';
+import {login} from '../APIServices/API';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({navigation}: any) => {
@@ -45,27 +45,27 @@ const LoginScreen = ({navigation}: any) => {
     isValidPassword(password) === true;
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const handleLogin = async () => {
-    if (isValidationLogin()) {
-      setLoading(true);
-      try {
-        const data = await loginUser(email, password);
-        await AsyncStorage.setItem('token', data.token);
-        setLoading(false);
-        navigation.navigate('Gateway');
-      } catch (error) {
-        setLoading(false);
-        if (error instanceof Error) {
-          Alert.alert('Login Error', error.message);
-        } else {
-          console.error('An unexpected error occurred:', error);
-          Alert.alert('Login Error', 'An unexpected error occurred');
-        }
-      }
-    } else {
-      Alert.alert('Validation Error', 'Username or password is invalid.');
-    }
-  };
+  // const handleLogin = async () => {
+  //   if (isValidationLogin()) {
+  //     setLoading(true);
+  //     try {
+  //       const data = await login(email, password);
+  //       await AsyncStorage.setItem('token', data.token);
+  //       setLoading(false);
+  //       navigation.navigate('Gateway');
+  //     } catch (error) {
+  //       setLoading(false);
+  //       if (error instanceof Error) {
+  //         Alert.alert('Login Error', error.message);
+  //       } else {
+  //         console.error('An unexpected error occurred:', error);
+  //         Alert.alert('Login Error', 'An unexpected error occurred');
+  //       }
+  //     }
+  //   } else {
+  //     Alert.alert('Validation Error', 'Username or password is invalid.');
+  //   }
+  // };
 
   return (
     <KeyboardAvoidingView
@@ -249,7 +249,8 @@ const LoginScreen = ({navigation}: any) => {
           <TouchableOpacity
             disabled={isValidationLogin() === false || loading}
             onPress={() => {
-              handleLogin();
+              navigation.navigate('Gateway');
+              //handleLogin();
             }}
             style={{
               backgroundColor:

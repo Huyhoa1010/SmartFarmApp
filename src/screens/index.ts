@@ -4,6 +4,7 @@ import RegisterScreen from './RegisterScreen';
 import ChooseGateway from './ChooseGateway';
 import MainScreen from './MainScreen';
 import AccountInformation from './AccountInformation';
+import ScanDevice from './ScanDevice';
 export {
   HomeScreen,
   LoginScreen,
@@ -11,4 +12,5 @@ export {
   ChooseGateway,
   MainScreen,
   AccountInformation,
+  ScanDevice,
 };

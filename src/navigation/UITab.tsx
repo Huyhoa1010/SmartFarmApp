@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {AccountInformation, ChooseGateway, MainScreen} from '../screens';
+import {AccountInformation, ChooseGateway, MainScreen, ScanDevice} from '../screens';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {colors} from '../constants';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -34,6 +34,20 @@ function UITab() {
         component={ChooseGateway}
         options={{
           tabBarLabel: 'Gateway',
+          tabBarIcon: ({focused}) => (
+            <Icon
+              name="door-closed"
+              size={20}
+              color={focused ? colors.font : colors.inactive}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="ScanDevice"
+        component={ScanDevice}
+        options={{
+          tabBarLabel: 'Scan Device',
           tabBarIcon: ({focused}) => (
             <Icon
               name="qrcode"
