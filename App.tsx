@@ -8,6 +8,8 @@ import {
   LoginScreen,
   MainScreen,
   RegisterScreen,
+  ScheduleDevice,
+  ScriptScreen,
 } from './src/screens';
 import UITab from './src/navigation/UITab';
 
@@ -38,6 +40,16 @@ const App = () => {
         <Stack.Screen
           name="Account"
           component={AccountInformation}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Schedule"
+          component={ScheduleDevice}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Script"
+          component={ScriptScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

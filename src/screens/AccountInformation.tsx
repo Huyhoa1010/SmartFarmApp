@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import colors from '../constants/colors';
 import {UIHeader} from '../components';
 
-const AccountInformation = () => {
+const AccountInformation = ({navigation}: any) => {
   return (
     <View
       style={{
@@ -158,7 +158,7 @@ const AccountInformation = () => {
             Gateway
           </Text>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Gateway')}>
           <View
             style={{
               flexDirection: 'row',
@@ -196,7 +196,7 @@ const AccountInformation = () => {
             />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Gateway')}>
           <View
             style={{
               flexDirection: 'row',
@@ -287,7 +287,7 @@ const AccountInformation = () => {
             Devices
           </Text>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Schedule')}>
           <View
             style={{
               flexDirection: 'row',
@@ -325,7 +325,7 @@ const AccountInformation = () => {
             />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Script')}>
           <View
             style={{
               flexDirection: 'row',
