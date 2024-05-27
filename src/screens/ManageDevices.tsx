@@ -1,110 +1,300 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
-import {View, Text, Button, FlatList, StyleSheet, Alert} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
+import {ThemedText} from '../components/ThemedText';
+import CustomAlertBoxNew from '../components/CustomAlertBoxNew';
+import CustomAlertBoxEdit from '../components/CustomAlertBoxEdit';
+import {useFocusEffect} from '@react-navigation/native';
+import {handleDeleteRequest} from '../APIServices/delete';
+import {handleGetRequest} from '../APIServices/get';
 import {colors} from '../constants';
 import UIHeader from '../components/UIHeader';
 
-interface Device {
-  id: string;
-  name: string;
-  status: string;
-}
+const windowHeight = Dimensions.get('window').height;
 
-const devicesData: Device[] = [
-  {id: '1', name: 'Thiết bị 1', status: 'Bật'},
-  {id: '2', name: 'Thiết bị 2', status: 'Tắt'},
-];
+const ManageDevicesScreen = ({navigation}: any) => {
+  const [showAlertNew, setShowAlertNew] = useState<boolean>(false);
+  const [showAlertEdit, setShowAlertEdit] = useState<boolean>(false);
+  const [selectedRectangle, setSelectedRectangle] = useState<any>(null);
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [idData, setId] = useState<number>(0);
+  const [fetchedData, setFetchedData] = useState<any[]>([]);
 
-const ManageDevicesScreen: React.FC = () => {
-  const [devices, setDevices] = useState<Device[]>(devicesData);
-
-  const addDevice = () => {
-    // Logic để thêm thiết bị mới
-    Alert.alert('Thêm thiết bị', 'Chức năng này sẽ được thêm sau.');
+  const GoEdit = () => {
+    navigation.navigate('Edit Page', {rectangle: selectedRectangle});
+    setShowAlertEdit(false);
   };
 
-  const editDevice = (id: string) => {
-    // Logic để sửa thiết bị
-    Alert.alert('Sửa thiết bị', `Chỉnh sửa thiết bị với ID: ${id}`);
+  const GoNew = () => {
+    navigation.navigate('New Page');
+    setShowAlertNew(false);
   };
 
-  const deleteDevice = (id: string) => {
-    // Logic để xóa thiết bị
-    Alert.alert('Xóa thiết bị', 'Bạn có chắc chắn muốn xóa thiết bị này?', [
-      {text: 'Hủy', style: 'cancel'},
-      {
-        text: 'Xóa',
-        style: 'destructive',
-        onPress: () => {
-          setDevices(devices.filter(device => device.id !== id));
-        },
-      },
-    ]);
+  const unShowBoxCancel = () => {
+    console.log('Cancel button pressed');
+    setShowAlertNew(false);
+    setShowAlertEdit(false);
+  };
+
+  const unShowBoxEdit = () => {
+    console.log('Delete pressed');
+    handleDeleteRequest(idData);
+    setShowAlertEdit(false);
+    getUpdate();
+  };
+
+  const handleNewPress = () => {
+    console.log('New pressed');
+    setSelectedRectangle(null);
+    setShowAlertNew(true);
+  };
+
+  const getUpdate = async () => {
+    try {
+      await handleGetRequest(setFetchedData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getUpdate();
+      console.log('Data updated');
+    }, []),
+  );
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      getUpdate();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const handleOptionPressRond = (index: number, item: any, id: number) => {
+    setSelectedRectangle(item);
+    setId(id);
+    setShowAlertEdit(true);
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: colors.primary}}>
-      <UIHeader title="Manage Devices" navigation={undefined} />
-      <View style={styles.container}>
-        <Button title="Thêm thiết bị mới" onPress={addDevice} color="#6200EE" />
-        <FlatList
-          data={devices}
-          keyExtractor={item => item.id}
-          renderItem={({item}) => (
-            <View style={styles.deviceContainer}>
-              <View style={styles.deviceInfo}>
-                <Text style={styles.deviceText}>{item.name}</Text>
-                <Text style={styles.deviceStatus}>
-                  Trạng thái: {item.status}
-                </Text>
+    <View style={styles.container}>
+      <UIHeader
+        navigation={navigation}
+        title="Manage Devices"
+        goBackScreen="Main"
+      />
+      <View style={styles.body}>
+        <View style={styles.stepContainer}>
+          <ThemedText type="subtitle" style={styles.centeredTextSub}>
+            Devices
+          </ThemedText>
+        </View>
+        <View style={styles.scrollContainer}>
+          <TouchableOpacity style={styles.button} onPress={handleNewPress}>
+            <ThemedText style={styles.buttonText}>New</ThemedText>
+          </TouchableOpacity>
+          <ScrollView style={styles.scrollView} indicatorStyle="black">
+            {fetchedData.map((item, index) => (
+              <View key={index} style={styles.rectangle}>
+                <View style={{alignItems: 'flex-start', right: 10}}>
+                  <ThemedText style={styles.rectangleText}>
+                    <ThemedText style={styles.rectangleTextBold}>
+                      name:{' '}
+                    </ThemedText>
+                    {item.name}
+                  </ThemedText>
+                  <ThemedText style={styles.rectangleText}>
+                    <ThemedText style={styles.rectangleTextBold}>
+                      mac:{' '}
+                    </ThemedText>
+                    {item.mac}
+                  </ThemedText>
+                  <ThemedText style={styles.rectangleText}>
+                    <ThemedText style={styles.rectangleTextBold}>
+                      status:{' '}
+                    </ThemedText>
+                    {item.status.toString()}
+                  </ThemedText>
+                </View>
+
+                <TouchableOpacity
+                  onPress={() => handleOptionPressRond(index, item, item.id)}
+                  style={styles.touchable}>
+                  {selectedOption === index && (
+                    <View style={styles.largeCircle}>
+                      <View style={styles.roundContainer}>
+                        {[...Array(3)].map((_, optionIndex) => (
+                          <View
+                            key={optionIndex}
+                            style={[
+                              styles.optionDot,
+                              selectedOption === index &&
+                                styles.selectedOptionDot,
+                            ]}
+                          />
+                        ))}
+                      </View>
+                    </View>
+                  )}
+                  {selectedOption !== index && (
+                    <View style={styles.largeCircle}>
+                      <View style={styles.roundContainer}>
+                        {[...Array(3)].map((_, optionIndex) => (
+                          <View key={optionIndex} style={[styles.optionDot]} />
+                        ))}
+                      </View>
+                    </View>
+                  )}
+                </TouchableOpacity>
               </View>
-              <View style={styles.buttonContainer}>
-                <Button title="Sửa" onPress={() => editDevice(item.id)} />
-                <Button
-                  title="Xóa"
-                  onPress={() => deleteDevice(item.id)}
-                  color="red"
-                />
+            ))}
+          </ScrollView>
+        </View>
+
+        {showAlertNew && (
+          <CustomAlertBoxNew
+            visible={showAlertNew}
+            message={<Text>Do you want to create new data?</Text>}
+            onCancel={unShowBoxCancel}
+            onConfirm={GoNew}
+            confirmButtonText={'New'}
+            cancelButtonText={'Cancel'}
+            showCancelButton={true}
+          />
+        )}
+        {showAlertEdit && selectedRectangle && (
+          <CustomAlertBoxEdit
+            visible={showAlertEdit}
+            message={
+              <View>
+                <Text>Do you want to update data?</Text>
               </View>
-            </View>
-          )}
-        />
+            }
+            onCancel={unShowBoxCancel}
+            onDelete={unShowBoxEdit}
+            onEdit={GoEdit}
+            editButtonText={'Edit'}
+            deleteButtonText={'Delete'}
+            cancelButtonText={'Cancel'}
+            showCancelButton={true}
+            showExtraButton={true}
+          />
+        )}
       </View>
     </View>
   );
 };
 
+export default ManageDevicesScreen;
+
 const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    backgroundColor: colors.primary,
-  },
-  deviceContainer: {
+  titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    marginBottom: 16,
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: '#FFF',
   },
-  deviceInfo: {
+  stepContainer: {
+    gap: 10,
+    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    paddingBottom: 10,
+  },
+  container: {
     flex: 1,
+    backgroundColor: colors.primary,
   },
-  deviceText: {
-    fontSize: 18,
+  body: {
+    paddingTop: 20,
+  },
+  centeredTextSub: {
+    textAlign: 'center',
+    color: 'black',
+    fontSize: 15,
+    fontStyle: 'italic',
+  },
+  button: {
+    backgroundColor: colors.font,
+    width: 80,
+    height: 25,
+    position: 'absolute',
+    right: 20,
+    top: 20,
+    borderRadius: 10,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  rectangle: {
+    width: 320,
+    height: 68,
+    backgroundColor: '#ffff',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    marginVertical: 5,
+    borderRadius: 10,
+  },
+  rectangleText: {
+    color: '#000000',
+    fontSize: 12,
+    left: 22,
+  },
+  rectangleTextBold: {
+    color: '#000000',
+    fontSize: 12,
     fontWeight: 'bold',
   },
-  deviceStatus: {
-    fontSize: 14,
-    color: '#777',
+  scrollView: {
+    maxHeight: windowHeight - 315,
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  scrollContainer: {
+    gap: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 50,
+    backgroundColor: colors.primary,
+  },
+  roundContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  optionDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: 'black',
+    marginVertical: 3,
+  },
+  selectedOptionDot: {
+    backgroundColor: '#ffffff',
+  },
+  largeCircle: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: -15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF1A',
+  },
+  touchable: {
+    position: 'absolute',
+    right: 7,
+    top: '10%',
   },
 });
-
-export default ManageDevicesScreen;

@@ -4,8 +4,9 @@ import {StyleSheet, Text, TouchableOpacity, Linking, View} from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
 import {colors} from '../constants';
+import {UIHeader} from '../components';
 
-const ScanDevice = () => {
+const ScanDevice = ({navigation}: any) => {
   const onSuccess = (e: {data: string}) => {
     Linking.openURL(e.data).catch(err =>
       console.error('An error occured', err),
@@ -18,16 +19,21 @@ const ScanDevice = () => {
         flex: 1,
         backgroundColor: colors.primary,
       }}>
+      <UIHeader
+        navigation={navigation}
+        title="Scan Devices"
+        goBackScreen="Main"
+      />
       <QRCodeScanner
         onRead={onSuccess}
         flashMode={RNCamera.Constants.FlashMode.torch}
-        topContent={
-          <Text style={styles.centerText}>
-            Go to{' '}
-            <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on
-            your computer and scan the QR code.
-          </Text>
-        }
+        // topContent={
+        //   <Text style={styles.centerText}>
+        //     Go to{' '}
+        //     <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on
+        //     your computer and scan the QR code.
+        //   </Text>
+        // }
         bottomContent={
           <TouchableOpacity style={styles.buttonTouchable}>
             <Text style={styles.buttonText}>Search device to scan</Text>

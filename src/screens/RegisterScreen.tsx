@@ -297,7 +297,7 @@ const RegisterScreen = ({navigation}: any) => {
             }}>
             <TouchableOpacity
               disabled={isValidationLogin() === false || loading}
-              onPress={navigation.navigate('Login')} //handleRegister
+              onPress={() => navigation.navigate('Login')} //handleRegister
               style={{
                 backgroundColor:
                   isValidationLogin() === true ? 'red' : colors.inactive,

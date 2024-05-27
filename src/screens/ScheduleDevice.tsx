@@ -12,7 +12,7 @@ import {
 import {colors} from '../constants';
 import {UIHeader} from '../components';
 
-const ScheduleDeviceScreen: React.FC = () => {
+const ScheduleDeviceScreen: React.FC = ({navigation}: any) => {
   const [scheduleName, setScheduleName] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
@@ -26,7 +26,11 @@ const ScheduleDeviceScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <UIHeader title="Schedule Device" navigation={undefined} />
+      <UIHeader
+        navigation={navigation}
+        title="Schedule Devices"
+        goBackScreen="Account"
+      />
       <ScrollView style={styles.body}>
         <Text style={styles.label}>Lập Lịch</Text>
         <TextInput

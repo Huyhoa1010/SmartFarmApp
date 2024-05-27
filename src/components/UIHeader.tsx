@@ -7,9 +7,10 @@ import {colors} from '../constants';
 interface UIHeaderProps {
   navigation: any;
   title: string;
+  goBackScreen: string;
 }
 
-const UIHeader = ({navigation, title}: UIHeaderProps) => {
+const UIHeader = ({navigation, title, goBackScreen}: UIHeaderProps) => {
   return (
     <View
       style={{
@@ -18,7 +19,7 @@ const UIHeader = ({navigation, title}: UIHeaderProps) => {
         flexDirection: 'row',
         alignItems: 'center',
       }}>
-      <TouchableOpacity onPress={() => navigation.push('Main')}>
+      <TouchableOpacity onPress={() => navigation.navigate(goBackScreen)}>
         <Icon
           name={'angle-left'}
           style={{

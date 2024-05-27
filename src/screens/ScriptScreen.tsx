@@ -11,7 +11,7 @@ import {
 import {colors} from '../constants';
 import {UIHeader} from '../components';
 
-const ScriptScreen: React.FC = () => {
+const ScriptScreen: React.FC = ({navigation}: any) => {
   const [scheduleName, setScheduleName] = useState('');
   const [relayCount, setRelayCount] = useState(0);
   const [ledCount, setLedCount] = useState(0);
@@ -22,7 +22,7 @@ const ScriptScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <UIHeader title="Settings" navigation={undefined} />
+      <UIHeader navigation={navigation} title="Script" goBackScreen="Account" />
       <View style={styles.body}>
         <Text style={styles.label}>Kịch bản</Text>
         <TextInput

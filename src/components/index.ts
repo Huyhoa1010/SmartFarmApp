@@ -1,3 +1,5 @@
 import UIButton from './UIButton';
 import UIHeader from './UIHeader';
-export {UIButton, UIHeader};
+import CustomAlertBoxEdit from './CustomAlertBoxEdit';
+import CustomAlertBoxNew from './CustomAlertBoxNew';
+export {UIButton, UIHeader, CustomAlertBoxEdit, CustomAlertBoxNew};

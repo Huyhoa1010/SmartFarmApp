@@ -8,6 +8,8 @@ import ScanDevice from './ScanDevice';
 import ManageDevicesScreen from './ManageDevices';
 import ScheduleDevice from './ScheduleDevice';
 import ScriptScreen from './ScriptScreen';
+import NewPage from './NewPage';
+import EditPage from './EditPage';
 export {
   HomeScreen,
   LoginScreen,
@@ -19,4 +21,6 @@ export {
   ManageDevicesScreen,
   ScheduleDevice,
   ScriptScreen,
+  NewPage,
+  EditPage,
 };

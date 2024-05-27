@@ -10,6 +10,10 @@ import {
   RegisterScreen,
   ScheduleDevice,
   ScriptScreen,
+  NewPage,
+  EditPage,
+  ManageDevicesScreen,
+  ScanDevice,
 } from './src/screens';
 import UITab from './src/navigation/UITab';
 
@@ -50,6 +54,26 @@ const App = () => {
         <Stack.Screen
           name="Script"
           component={ScriptScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="New Page"
+          component={NewPage}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Edit Page"
+          component={EditPage}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Manage Devices"
+          component={ManageDevicesScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Scan Device"
+          component={ScanDevice}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
